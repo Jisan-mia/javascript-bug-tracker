@@ -1,0 +1,66 @@
+
+
+
+.issue-area{
+	background-color: rgba(0, 0, 0, 0.08);
+	padding: 40px 50px;
+	border-radius: 6px;
+	box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.3)
+}
+
+.status{
+	background-color: deepskyblue;
+	color: white;
+	padding: 2px 5px;
+	border-radius: 3px;
+}
+.tracker-area{
+	background-color: rgba(0, 0, 0, 0.03);
+	;
+	border-radius: 4px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	box-shadow: 9px 11px 20px rgba(0, 0, 0, 0.085);
+	margin-top: 24px !important;
+}
+table{
+	background-color:rgba(0, 0, 0, 0.04); ;
+	text-align: center;
+	margin: 0 auto;
+	width: 100%;
+	position: relative;
+	z-index: 2;
+}
+.stats{
+	letter-spacing: 8px;;
+	font-size: 18px;
+}
+tr, th, td{
+	color: rgba(0,0, 0, 0.6);
+	padding:2px 5px;
+	border: 1px solid rgba(0, 0, 0, 0.3);
+}
+table caption{
+	position: absolute;
+	left: 22%;
+	top: 0%;
+	transform: rotate(5deg);
+  	transform-origin: 20% 40%;
+	font-size:  21px;
+	z-index: 3;
+	/*color: rgba(0, 0, 0, 0.40);*/
+	color: rgba(255,165,0, 1);
+	letter-spacing: 3px;
+	font-weight: 300;
+}
+
+@media (max-width: 500px){
+	.issue-area{
+		background-color: rgba(0, 0, 0, 0.07);
+		padding: 20px 20px;
+		border-radius: 6px;
+	}
+	.container h1{
+		font-size: 25px;
+	}
+
+}
