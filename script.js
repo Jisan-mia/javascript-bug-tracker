@@ -1,7 +1,7 @@
 document.getElementById('issueInputForm').addEventListener('submit', saveIssue);
 
 
-//saving or setting issues in localStorage
+//saving or setting issues in localStorage 
 function saveIssue(e){
 	let issueDesc = document.getElementById('issueDescInput').value;
 	let issueSeverity = document.getElementById('issueSeverityInput').value;
@@ -20,15 +20,30 @@ function saveIssue(e){
 		severity: issueSeverity,
 		assignedTo: issueAssignedTo,
 		status: issueStatus,
+		
+	}
+
+	let tableCount = {
 		open: issueOpenCount,
 		close: issueCloseCount
+	}
+
+	if(localStorage.getItem('tableCounts') == null){
+		let tableCounts = [];
+		tableCounts.push(tableCount);
+		localStorage.setItem('tableCounts', JSON.stringify(tableCounts))
+	}
+	else{
+		let tableCounts = JSON.parse(localStorage.getItem('tableCounts'))
+		tableCounts.push(tableCount);
+		localStorage.setItem('tableCounts', JSON.stringify(tableCounts));
 	}
 
 	// if any input field is empty then nothing will do else do the following
 	if(issueDesc == "" || issueAssignedTo == ""){
 
 	}else{
-		if(localStorage.getItem('issues') == null){
+		if(localStorage.getItem('issues') == null ){
 			let issues = [];
 			issues.push(issue);
 			localStorage.setItem('issues', JSON.stringify(issues));
@@ -51,9 +66,12 @@ function saveIssue(e){
 //when user close an issue this will happen
 function setStatusClosed(id){
 	let issues = JSON.parse(localStorage.getItem('issues'));
+	let tableCounts = JSON.parse(localStorage.getItem('tableCounts'));
 
-	issues.close +=  1;
-	issues.open -= 1;
+	for(let i = 0; i < tableCounts.length; i++){
+		tableCounts[i].open = tableCounts[i].open - 1;
+		tableCounts[i].close = tableCounts[i].close + 1; 
+	}
 
 	for( let i = 0; i < issues.length; i++){
 		if(issues[i].id == id){
@@ -64,6 +82,7 @@ function setStatusClosed(id){
 		}
 	}
 
+	localStorage.setItem('tableCounts', JSON.stringify(tableCounts));
 	localStorage.setItem('issues', JSON.stringify(issues));
 
 	fetchIssues();
@@ -73,26 +92,28 @@ function setStatusClosed(id){
 //when user delete an issue 
 function deleteIssue(id){
 	let issues = JSON.parse(localStorage.getItem('issues'));
-	console.log(issues)
+	let tableCounts = JSON.parse(localStorage.getItem('tableCounts'));
+	// console.log(tableCounts);
+	console.log(issues);
 
-	// if(issues[i].close != 0){
-		// 	issues[i].close = issues[i].close - 1;
-	// }
-	// if(issues.open != 0){
-		
-	// }
-	// else{
-	// 	issues.open = issues[i].open - 1;
-	// }
-	issues.open = issues.open - 1;
-	console.log(issues.open);
+	for( let i = 0; i < tableCounts.length; i++){
+		if(tableCounts[i].open != 0 ){
+			
+			tableCounts[i].open = tableCounts[i].open - 1;
+			tableCounts[i].close = tableCounts[i].close - 1;
+			// tableCounts.splice(i, 1);
+		}
+	}
+	
 
 	for(let i = 0; i < issues.length; i++){
 		if(issues[i].id == id){
 			issues.splice(i, 1);
+
 		}
 	}
 
+	localStorage.setItem('tableCounts', JSON.stringify(tableCounts))
 	localStorage.setItem('issues', JSON.stringify(issues));
 
 
@@ -103,10 +124,22 @@ function deleteIssue(id){
 //fetching or getting issues and other information from the browser localStorage
 function fetchIssues(){
 	var issues = JSON.parse(localStorage.getItem('issues'));
+	var tableCounts = JSON.parse(localStorage.getItem('tableCounts'))
+	console.log(tableCounts)
+
 	let issuesList = document.getElementById('issuesList');
-	console.log(typeof issues, issues)
+	// console.log(typeof issues, issues)
 
 	issuesList.innerHTML = '';
+
+	for(let i = 0; i < tableCounts.length; i++){
+		let open = tableCounts[i].open;
+		let close = tableCounts[i].close;
+		document.getElementById('issueOpneCount').innerText = open;
+		document.getElementById('issueCloseCount').innerText = close;
+	}
+	
+
 
 	for(let i = 0; i < issues.length; i++){
 		let id = issues[i].id;
@@ -115,11 +148,6 @@ function fetchIssues(){
 		let assignedTo = issues[i].assignedTo;
 		let status = issues[i].status;
 
-		let open = issues[i].open;
-		let close = issues[i].close;
-
-		document.getElementById('issueOpneCount').innerText = open;
-		document.getElementById('issueCloseCount').innerText = close;
 
 		//issue templete using string concatenation
 		issuesList.innerHTML +=
