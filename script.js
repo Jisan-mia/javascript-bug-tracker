@@ -28,6 +28,7 @@ function saveIssue(e){
 		close: issueCloseCount
 	}
 
+	// getting else setting statistics table count to localStorage
 	if(localStorage.getItem('tableCounts') == null){
 		let tableCounts = [];
 		tableCounts.push(tableCount);
@@ -96,21 +97,27 @@ function deleteIssue(id){
 	// console.log(tableCounts);
 	console.log(issues);
 
-	for( let i = 0; i < tableCounts.length; i++){
-		if(tableCounts[i].open != 0 ){
-			
-			tableCounts[i].open = tableCounts[i].open - 1;
-			tableCounts[i].close = tableCounts[i].close - 1;
-			// tableCounts.splice(i, 1);
+	// if the current issue is closed then decrement 1 from the closeCount
+	// or if  the current issue is open then decrement 1 from the openCount
+	for(let j = 0; j < tableCounts.length; j++){
+		for(let i = 0; i < issues.length; i++){
+			if(issues[i].id == id){
+				if(issues[i].status == "Closed"){
+					tableCounts[j].close = tableCounts[j].close - 1;
+				}
+				else if(issues[i].status == 'Open'){
+					tableCounts[j].open = tableCounts[j].open - 1;
+				}
+			}
 		}
 	}
-	
 
 	for(let i = 0; i < issues.length; i++){
 		if(issues[i].id == id){
 			issues.splice(i, 1);
 
 		}
+
 	}
 
 	localStorage.setItem('tableCounts', JSON.stringify(tableCounts))
@@ -132,6 +139,7 @@ function fetchIssues(){
 
 	issuesList.innerHTML = '';
 
+	//showing close and open issue numer
 	for(let i = 0; i < tableCounts.length; i++){
 		let open = tableCounts[i].open;
 		let close = tableCounts[i].close;
@@ -139,8 +147,6 @@ function fetchIssues(){
 		document.getElementById('issueCloseCount').innerText = close;
 	}
 	
-
-
 	for(let i = 0; i < issues.length; i++){
 		let id = issues[i].id;
 		let desc = issues[i].description;
@@ -174,9 +180,6 @@ function fetchIssues(){
         		<button onclick="deleteIssue(${issues[i].id})" class="btn btn-danger">Delete</button>  
         	 </div>
         `*/
-
-
-
 
 	}
 }
