@@ -1,5 +1,7 @@
 document.getElementById('issueInputForm').addEventListener('submit', saveIssue);
 
+
+//saving or setting issues in localStorage
 function saveIssue(e){
 	let issueDesc = document.getElementById('issueDescInput').value;
 	let issueSeverity = document.getElementById('issueSeverityInput').value;
@@ -22,6 +24,7 @@ function saveIssue(e){
 		close: issueCloseCount
 	}
 
+	// if any input field is empty then nothing will do else do the following
 	if(issueDesc == "" || issueAssignedTo == ""){
 
 	}else{
@@ -38,14 +41,14 @@ function saveIssue(e){
 		document.getElementById('issueInputForm').reset();
 
 		fetchIssues();
-
-		
 	}
+
 	e.preventDefault();
 	
-
 }
 
+
+//when user close an issue this will happen
 function setStatusClosed(id){
 	let issues = JSON.parse(localStorage.getItem('issues'));
 
@@ -57,8 +60,6 @@ function setStatusClosed(id){
 
 			issues[i].status = 'Closed';
 
-			
-
 			issues[i].description = `<s> ${issues[i].description} </s>`
 		}
 	}
@@ -69,6 +70,7 @@ function setStatusClosed(id){
 }
 
 
+//when user delete an issue 
 function deleteIssue(id){
 	let issues = JSON.parse(localStorage.getItem('issues'));
 	console.log(issues)
@@ -97,6 +99,8 @@ function deleteIssue(id){
 	fetchIssues();
 }
 
+
+//fetching or getting issues and other information from the browser localStorage
 function fetchIssues(){
 	var issues = JSON.parse(localStorage.getItem('issues'));
 	let issuesList = document.getElementById('issuesList');
@@ -117,7 +121,7 @@ function fetchIssues(){
 		document.getElementById('issueOpneCount').innerText = open;
 		document.getElementById('issueCloseCount').innerText = close;
 
-
+		//issue templete using string concatenation
 		issuesList.innerHTML +=
 		'<div class="tracker-area tracker-area px-4 py-3 m-3">'+
             '<h6>Issue ID: ' + id + '</h6>'+
@@ -129,6 +133,8 @@ function fetchIssues(){
             '<button onclick="deleteIssue(\''+id+'\')" class="btn btn-danger">Delete</button>'+
         '</div>';
 
+
+        // using javascript template literal
         /*issuesList.innerHTML += `
         	<div class="jumbotron">
         		<h6>Issue Id: ${id}</h6>
