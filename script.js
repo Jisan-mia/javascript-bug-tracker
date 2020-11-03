@@ -104,8 +104,7 @@ function setStatusClosed(id){
 function deleteIssue(id){
 	let issues = JSON.parse(localStorage.getItem('issues'));
 	let tableCounts = JSON.parse(localStorage.getItem('tableCounts'));
-	console.log(tableCounts);
-	console.log(issues);
+	
 
 	// if the current issue is closed then decrement 1 from the closeCount
 	// or if  the current issue is open then decrement 1 from the openCount
@@ -122,12 +121,13 @@ function deleteIssue(id){
 		}
 		if(tableCounts[tableCounts.length -1].open == 0 && tableCounts[tableCounts.length -1].close == 0){
 			console.log("restert");
-			tableCounts.splice( 0,tableCounts.length )
-			localStorage.clear();
+			tableCounts.splice(0, tableCounts.length-1)
+			// localStorage.clear();
 		}
-		
 	}
-
+	
+console.log(tableCounts);
+	console.log(issues);
 	
 
 
