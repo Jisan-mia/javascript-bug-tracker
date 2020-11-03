@@ -28,22 +28,25 @@ function saveIssue(e){
 		close: issueCloseCount
 	}
 
-	// getting else setting statistics table count to localStorage
-	if(localStorage.getItem('tableCounts') == null){
-		let tableCounts = [];
-		tableCounts.push(tableCount);
-		localStorage.setItem('tableCounts', JSON.stringify(tableCounts))
-	}
-	else{
-		let tableCounts = JSON.parse(localStorage.getItem('tableCounts'))
-		tableCounts.push(tableCount);
-		localStorage.setItem('tableCounts', JSON.stringify(tableCounts));
-	}
+	
 
 	// if any input field is empty then nothing will do else do the following
 	if(issueDesc == "" || issueAssignedTo == ""){
 
 	}else{
+			// getting else setting statistics table count to localStorage
+		if(localStorage.getItem('tableCounts') == null){
+			let tableCounts = [];
+			tableCounts.push(tableCount);
+			localStorage.setItem('tableCounts', JSON.stringify(tableCounts))
+		}
+		else{
+			let tableCounts = JSON.parse(localStorage.getItem('tableCounts'))
+			tableCounts.push(tableCount);
+			localStorage.setItem('tableCounts', JSON.stringify(tableCounts));
+		}
+
+		//issues
 		if(localStorage.getItem('issues') == null ){
 			let issues = [];
 			issues.push(issue);
@@ -70,9 +73,16 @@ function setStatusClosed(id){
 	let tableCounts = JSON.parse(localStorage.getItem('tableCounts'));
 
 	for(let i = 0; i < tableCounts.length; i++){
-		tableCounts[i].open = tableCounts[i].open - 1;
-		tableCounts[i].close = tableCounts[i].close + 1; 
+		for(let j = 0; j < issues.length; j++){
+			if(issues[j].id == id){
+				if(issues[j].status == "Open"){
+					tableCounts[i].open = tableCounts[i].open - 1;
+					tableCounts[i].close = tableCounts[i].close + 1; 
+				}
+			}
+		}
 	}
+
 
 	for( let i = 0; i < issues.length; i++){
 		if(issues[i].id == id){
@@ -94,7 +104,7 @@ function setStatusClosed(id){
 function deleteIssue(id){
 	let issues = JSON.parse(localStorage.getItem('issues'));
 	let tableCounts = JSON.parse(localStorage.getItem('tableCounts'));
-	// console.log(tableCounts);
+	console.log(tableCounts);
 	console.log(issues);
 
 	// if the current issue is closed then decrement 1 from the closeCount
@@ -110,15 +120,25 @@ function deleteIssue(id){
 				}
 			}
 		}
+		if(tableCounts[tableCounts.length -1].open == 0 && tableCounts[tableCounts.length -1].close == 0){
+			console.log("restert");
+			localStorage.removeItem('tableCounts');
+		}
+		
 	}
+
+	
+
+
 
 	for(let i = 0; i < issues.length; i++){
 		if(issues[i].id == id){
 			issues.splice(i, 1);
 
 		}
-
 	}
+
+
 
 	localStorage.setItem('tableCounts', JSON.stringify(tableCounts))
 	localStorage.setItem('issues', JSON.stringify(issues));
@@ -132,7 +152,7 @@ function deleteIssue(id){
 function fetchIssues(){
 	var issues = JSON.parse(localStorage.getItem('issues'));
 	var tableCounts = JSON.parse(localStorage.getItem('tableCounts'))
-	console.log(tableCounts)
+	// console.log(tableCounts)
 
 	let issuesList = document.getElementById('issuesList');
 	// console.log(typeof issues, issues)
@@ -183,3 +203,15 @@ function fetchIssues(){
 
 	}
 }
+
+//reset
+function resetAllIssue(){
+	console.log("localStorge clear")
+
+	document.getElementById('issueOpneCount').innerText = "0";
+	document.getElementById('issueCloseCount').innerText = "0";
+	localStorage.clear();
+ 
+	document.getElementById('issuesList').innerHTML = '';
+}
+

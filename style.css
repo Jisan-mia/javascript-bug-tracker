@@ -62,5 +62,17 @@ table caption{
 	.container h1{
 		font-size: 25px;
 	}
+	.tacker-area{
+		padding: ;
+	}
+	.tracker-area h6{
+		font-size: 12px;
+	}
+	.tracker-area h3{
+		font-size: 18px;
+	}
+	.tracker-area p{
+		font-size: 14px;
+	}
 
 }
