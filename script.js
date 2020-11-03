@@ -122,7 +122,8 @@ function deleteIssue(id){
 		}
 		if(tableCounts[tableCounts.length -1].open == 0 && tableCounts[tableCounts.length -1].close == 0){
 			console.log("restert");
-			localStorage.removeItem('tableCounts');
+			tableCounts.splice( 0,tableCounts.length )
+			localStorage.clear();
 		}
 		
 	}
